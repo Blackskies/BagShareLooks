@@ -1,11 +1,11 @@
-export default interface BookingList {
+export default interface BagsList {
   id?: any | null;
   flightNumber: string;
   weightAvailable: string;
   departureTime: string;
   arrivalTime: string;
-  departureDate: string;
-  departureCity: string;
-  arrivalCity: string;
+  travelDate: string;
+  fromCity: string;
+  toCity: string;
   price: number;
 }

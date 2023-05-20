@@ -1,35 +1,15 @@
-import { useState, useEffect } from "react";
-import { Col, Container, Row, ThemeProvider } from "react-bootstrap";
-import bagsharemind from "../apis/bagsharemind";
-import BookingList from "../types/bookings";
-import { SlPlane } from "react-icons/sl";
+import { ReactNode, useState } from "react";
+import { Container, ThemeProvider } from "react-bootstrap";
+import FlightSearch from "../components/views/flights/flight_search";
+import FlightResults from "../components/views/flights/flight_results";
+import FlightsList from "../types/flights";
 
 const Home = () => {
-  const intialBookins = [
-    {
-      id: null,
-      flightNumber: "",
-      weightAvailable: "",
-      departureTime: "",
-      arrivalTime: "",
-      departureDate: "",
-      departureCity: "",
-      arrivalCity: "",
-      price: 0,
-    },
-  ];
-  const [bookings, setBookings] = useState<BookingList[]>(intialBookins);
-
-  useEffect(() => {
-    getBookingsList();
-  }, []);
-
-  const getBookingsList = async () => {
-    const response = await bagsharemind.get("/bookings/all");
-    setBookings(response.data);
-  };
-
-  console.log("Bookings", bookings[0]);
+  const [flights, setFlights] = useState<FlightsList[]>([]);
+  const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
+  const [searchHeader, setSearchHeader] = useState<ReactNode | undefined>(
+    undefined
+  );
 
   return (
     <ThemeProvider
@@ -37,38 +17,24 @@ const Home = () => {
       minBreakpoint="xxs"
     >
       <Container>
-        {bookings.map((booking, index) => {
-          return (
-            <Row
-              key={index}
-              className="text-bg-dark p-3 text-center align-items-center m-1 shadow "
-            >
-              <Col className="text-start d-md-none">
-                <div className="d-inline-flex align-items-center">
-                  <SlPlane size="15px" />
-                  &nbsp;{booking.flightNumber}
-                </div>
-                <div className="text-white-50 ">{booking.departureDate}</div>
-              </Col>
-              <Col className="text-start d-none d-md-block">
-                <SlPlane size="15px" /> {booking.flightNumber}
-              </Col>
-              <Col className="text-start d-none d-md-block">
-                {booking.departureDate}
-              </Col>
-              <Col>
-                <div>{booking.departureTime}</div>
-                <div className="text-white-50">{booking.departureCity}</div>
-              </Col>
-              <Col>
-                <div>{booking.arrivalTime}</div>
-                <div className="text-white-50">{booking.arrivalCity}</div>
-              </Col>
-              <Col>{booking.weightAvailable}</Col>
-              <Col>{booking.price}</Col>
-            </Row>
-          );
-        })}
+        <FlightSearch
+          setFlights={setFlights}
+          isSearchTriggered={isSearchTriggered}
+          setIsSearchTriggered={setIsSearchTriggered}
+          setSearchHeader={setSearchHeader}
+        />
+        {flights.length > 0 ? (
+          <FlightResults flights={flights}>{searchHeader}</FlightResults>
+        ) : isSearchTriggered ? (
+          <div className="text-center mt-4">
+            <div>Flights on these dates are not available.</div> Please change
+            the search criteria.
+          </div>
+        ) : (
+          <div className="text-center mt-4">
+            <div>Placeholder for Homepage Content </div>
+          </div>
+        )}
       </Container>
     </ThemeProvider>
   );
