@@ -1,16 +1,19 @@
 import { ReactNode, useState } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import FlightsList from "../../../types/flights";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { SlPlane } from "react-icons/sl";
 import { FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import Flight from "../../../types/flights";
 
 type Props = {
-  flights: FlightsList[];
+  flights: Flight[];
   children: ReactNode | undefined;
 };
 
 const FlightResults = ({ flights, children }: Props) => {
   const [expandRows, setExpandRows] = useState<number[]>([]);
+
+  const navigate = useNavigate();
 
   const handleExpandRows = (id: number) => {
     let expandedRowList = expandRows;
@@ -19,6 +22,10 @@ const FlightResults = ({ flights, children }: Props) => {
       ? expandedRowList.filter((row) => row !== id)
       : expandedRowList.concat(id);
     setExpandRows(newExpandRows);
+  };
+
+  const navToBags = (flight: Flight) => {
+    navigate(`/bags`, { state: flight });
   };
 
   return (
@@ -83,7 +90,11 @@ const FlightResults = ({ flights, children }: Props) => {
                       </Row>
                     </Col>
                     <Col className="text-center">
-                      <Button variant="dark" className="px-3 py-2">
+                      <Button
+                        variant="dark"
+                        className="px-3 py-2"
+                        onClick={() => navToBags(flight)}
+                      >
                         Continue
                       </Button>
                     </Col>

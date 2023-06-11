@@ -4,7 +4,8 @@ import FlightSearch from "../components/views/flights/flight_search";
 import FlightResults from "../components/views/flights/flight_results";
 import FlightsList from "../types/flights";
 
-const Home = () => {
+const Flights = () => {
+  //const location = useLocation();
   const [flights, setFlights] = useState<FlightsList[]>([]);
   const [isSearchTriggered, setIsSearchTriggered] = useState<boolean>(false);
   const [searchHeader, setSearchHeader] = useState<ReactNode | undefined>(
@@ -40,4 +41,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Flights;

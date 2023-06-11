@@ -1,4 +1,4 @@
-export default interface FlightsList {
+export default interface Flight {
   id?: any | null;
   airlines: string;
   flightNumber: string;
